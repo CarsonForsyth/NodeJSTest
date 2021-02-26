@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Create an Ingredient</title>
+
+    <link href="./styles.css" type="text/css" rel="stylesheet" />
+   
+</head>
+
+<body>
+
+<div class="background">
+
+
+<div class="l">
+    <form action="/api/ingredient" method="POST">
+        <label for="ingredientLabel">Create New Ingredient</label><br>
+        
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder=""><br>
+
+        
+        
+        <button type="button" class="btn btn-default" onclick="addUnitType()">Add a Unit Type</button>
+
+        <div id="typesContainer">
+            <script type='text/javascript'>
+                var list = '<option value="unit">Unit</option><option value="volume">Volume</option><option value="mass">Mass</option><option value="length">Length</option>';
+                var numTypes = 0;
+                function addUnitType(){
+                    var container = document.getElementById("typesContainer");
+                    container.appendChild(document.createTextNode("Type #" + ( numTypes+1 )));
+
+                    var input = document.createElement("select");
+                    input.setAttribute('name', 'unitType');
+                    input.setAttribute('id', 'type_' + ( numTypes ));
+                    input.setAttribute('class', "dynField");
+                    input.innerHTML = list;
+                    
+                    container.appendChild(input);
+                    container.appendChild(document.createElement("br"));
+                    numTypes += 1;
+                }
+                
+            </script>
+        </div>
+
+        <label for="modifier">Modifier:</label>
+        <input type="text" class="form-control" id="modifier" name="modifier" placeholder=""><br>
+
+        <label for="note">Note:</label>
+        <input type="text" class="form-control" id="note" name="note" placeholder=""><br>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+
+</div>
+
+
+</body>
+</html>

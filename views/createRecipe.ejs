@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Write a recipe</title>
+    
+    <link href="./styles.css" type="text/css" rel="stylesheet" />
+    
+</head>
+
+<body>
+
+<div class="background">
+
+
+<div class="l">
+    <!--
+    <script type='text/javascript'>
+        function addComponent(){
+            var number = document.getElementById("compNo").value;
+            var container = document.getElementById("container");
+            while(container.hasChildNodes()){
+                container.removeChild(container.lastChild);
+            }
+            for ( i = 0; i < number; i ++ ) {
+                container.appendChild(document.createTextNode("Component #" + ( i+1 )));
+                var field0 = document.createElement("input");
+                //field0.type = "text";
+                //field0.name = "compTitle" + ( i+1 );
+                field0.setAttribute('type', 'text');
+                field0.setAttribute('name', 'compTitle[' + ( i+1 ) + ']');
+                field0.setAttribute('placeholder', 'Title');
+                field0.setAttribute('class', "dynField");
+                var field1 = document.createElement("input");
+                field1.setAttribute('type', 'text');
+                field1.setAttribute('name', 'compIng[' + ( i+1 ) + ']');
+                field1.setAttribute('placeholder', 'ingredients');
+                field1.setAttribute('class', "dynField");
+                var field2 = document.createElement("input");
+                field2.setAttribute('type', 'text');
+                field2.setAttribute('name', 'compSteps[' + ( i+1 ) + ']');
+                field2.setAttribute('placeholder', 'instructions');
+                field2.setAttribute('class', "dynField");
+                container.append(field0);
+                container.append(field1);
+                container.append(field2);
+                container.appendChild(document.createElement("br"));
+            }
+        }
+    </script>-->
+    <%- include('createComponent.ejs') %>
+    <form action="/api/recipe" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder=""><br>
+
+        <label for="preface">Preface:</label>
+        <input type="text" class="form-control" id="preface" name="preface" placeholder=""><br>
+
+        
+
+        
+
+        <label for="compLabel">Components:</label>
+        <div id="container">
+        </div><br>
+        
+        <label for="steps">Steps:</label>
+        <input type="text" class="form-control" id="steps" name="steps" placeholder=""><br>
+
+        <label for="notes">Notes:</label>
+        <input type="text" class="form-control" id="notes" name="notes" placeholder=""><br>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+
+</div>
+
+
+</body>
+</html>

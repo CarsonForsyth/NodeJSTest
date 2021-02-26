@@ -1,0 +1,14 @@
+<table>
+    <thead>
+        <tr>
+            <th>recipes available</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% recipes.forEach(rec => { %>
+            <tr>
+                <td><%= rec.title %>, by <%= rec.author %>; <a href="<%= rec.url %>"class="btn btn-primary" role="button">view here</a></td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

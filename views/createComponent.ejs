@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<body>
+    
+<div class="background">
+
+
+<div class="l">
+    <form action="/api/component" method="POST">
+        <label for="compLabel">Create New Component</label><br>
+
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder=""><br>
+
+        <button type="button" class="btn btn-default" onclick="addIngr()">Add an Ingredient</button>
+        
+        <input type="hidden" name="ingredients" id="ingredients">
+        <datalist id="ingr"></datalist>
+        <div id="ingrContainer">
+            <script type='text/javascript'>
+                var ingr = JSON.parse('<%- JSON.stringify(availableIngredients) %>');
+                var available = '';
+                for ( i = 0; i < ingr.length; i ++ ) {
+                    available += '<option value="' + ingr[i].name + '" />';
+                }
+                document.getElementById("ingr").innerHTML = available;
+
+                var numIngr = 0;
+                var unitSelectHTML = '<optgroup label="Volume">'+
+                    '<option value="c">cup</option>'+
+                    '<option value="tbsp">Tbsp</option>'+
+                    '<option value="tsp">tsp</option>'+
+                    '<option value="floz">fluid ounce</option>'+
+                    '<option value="ml">milliliter</option>'+
+                    '<option value="l">liter</option>'+
+                    '</optgroup>'+'<optgroup label="Mass">'+
+                    '<option value="g">gram</option>'+
+                    '<option value="kg">kilogram</option>'+
+                    '<option value="oz">ounce</option>'+
+                    '<option value="lb">pound</option>'+
+                    '</optgroup>'+'<optgroup label="Length">'+
+                    '<option value="in">inch</option>'+
+                    '<option value="cm">centimeter</option>'+
+                    '</optgroup>'+'<optgroup label="None">'+
+                    '<option value="u">unit</option>'+
+                    '</optgroup>';
+                function addIngr(){
+                    var container = document.getElementById("ingrContainer");
+                    container.appendChild(document.createTextNode("Ingredient #" + ( numIngr+1 )));
+
+                    var input0 = document.createElement("input");
+                    input0.setAttribute('type', 'list');
+                    input0.setAttribute('name', 'name');
+                    input0.setAttribute('id', 'ingrName_' + ( numIngr ));
+                    input0.setAttribute('list', "ingr");
+                    input0.setAttribute('class', "dynField");
+
+                    var input1 = document.createElement("input");
+                    input1.setAttribute('type', 'number');
+                    input1.setAttribute('value', '1');
+                    input1.setAttribute('name', 'quantity');
+                    input1.setAttribute('id', 'ingrQuantity_' + ( numIngr ));
+                    input1.setAttribute('class', "dynField");
+
+                    var input2 = document.createElement('select');
+                    input2.setAttribute('type', 'text');
+                    input2.setAttribute('name', 'unit');
+                    input2.setAttribute('id', 'ingrUnit_' + ( numIngr ));
+                    input2.innerHTML = unitSelectHTML;
+                    input2.setAttribute('class', "dynField");
+
+                    container.appendChild(input1);
+                    container.appendChild(input2);
+                    container.appendChild(input0);
+                    container.appendChild(document.createElement("br"));
+                    numIngr += 1;
+                }
+                
+                function parseIngredients(){
+                    var json = [];
+                    var names = document.getElementsByName("name");
+                    var quantities = document.getElementsByName("quantity");
+                    var units = document.getElementsByName("unit");
+                    for (i = 0; i < names.length; i ++){
+                        json.push({
+                            "name": names[i].value,
+                            "quantity": quantities[i].value,
+                            "unit": units[i].value
+                        });
+                    }
+                    console.log(json);
+                    hidden = document.getElementById("ingredients");
+                    hidden.setAttribute('value', JSON.stringify(json));
+                }
+            </script>
+        </div>
+
+        <button type="button" class="btn btn-default" onclick="addStep()">Add a Step</button>
+
+        <div id="stepContainer">
+            <script type='text/javascript'>
+                var numSteps = 0;
+                function addStep(){
+                    var container = document.getElementById("stepContainer");
+                    container.appendChild(document.createTextNode("Step #" + ( numSteps+1 )));
+                    var input = document.createElement("input");
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('name', 'steps');
+                    input.setAttribute('class', 'dynField');
+                    input.setAttribute('id', 'step_' + ( numSteps ));
+                    container.appendChild(input);
+                    container.appendChild(document.createElement("br"));
+                    numSteps += 1;
+                }
+                
+            </script>
+        </div>
+        
+        
+        <label for="activeTime">Time Actively Cooking:</label>
+        <input type="text" class="form-control" id="activeTime" name="activeTime" placeholder=""><br>
+
+        <label for="awayTime">Time Away:</label>
+        <input type="text" class="form-control" id="awayTime" name="awayTime" placeholder=""><br>
+
+        <button type="submit" class="btn btn-default" onclick="parseIngredients()">Submit</button>
+
+    </form>
+</div>
+
+</div>
+
+
+</body>
+</html>
