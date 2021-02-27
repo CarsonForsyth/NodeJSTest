@@ -12,7 +12,7 @@ const componentSchema = mongoose.Schema({
     activeTime: {type: Number},      // Time actively working in minutes.
     awayTime: {type: Number},        // Time in minutes.
     steps: [{type: String}],
-    servings: {quantity: {type: Number}, unit: {type: String, enum: ["g", "q", "p", "c", "floz", "tbsp", "tsp", "l", "ml", "lb", "oz", "kg", "g", "in", "cm", "u"]}},
+    servings: {quantity: {type: Number}, unit: {type: String, }},
     image: [{ type: String }]
 });
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>  
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Ingredients</title>
+</head>
+<body>
+    <main><div class="row">
+        <% for(var i=0; i < ingredients.length; i++) { %>
+            <% if (i % 3 == 0){ console.log(i)%> <%}%>    
+            <div class="col-sm-1">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"> <%= ingredients[i].name %> </h5>
+                        <p class="card-text"><%= ingredients[i].modifier %></p>
+                        <p class="card-text"><%= ingredients[i].unitType %></p>
+                        <p class="card-text"><%= ingredients[i].note %></p>
+                    </div>
+                </div>
+            </div>
+            <% if (i % 3 == 0){ console.log(i)%> <%}%>    
+        <% } %></div>
+</main>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

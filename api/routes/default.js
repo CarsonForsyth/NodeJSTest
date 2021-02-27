@@ -4,6 +4,7 @@ const Recipe = require('./../models/recipe');
 const Ingredient = require('./../models/ingredient');
 const app = express();
 const bodyParser = require("body-parser");
+const { readSync } = require('fs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -38,20 +39,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/viewRecipe/:recipeID", (req, res) => {
-  var data = {}
   recipe = Recipe.findOne({
     _id: req.params.recipeID
   }).populate('components').exec()
   .then(doc => {
     console.log(doc);
-    data.doc = doc;
-  }).then(() => {
-    return Ingredient.find({});
-  }).then(docs => {
-    data.availableIngredients = docs;
-  }).then(() => {
-    console.log(data);
-    res.render("viewRecipe.ejs", {data});
+    res.set('Content-Type', 'text/html');
+    /*for (var i = 0 ; i < doc.components.length ; i ++) {
+      for (var j = 0 ; j < doc.components[i].steps.length ; i ++ ) {
+
+      }
+    }*/
+    res.render("viewRecipe.ejs", {doc: doc})
   })
   .catch(err => {
     console.log(err);
@@ -69,7 +68,7 @@ app.get("/createRecipe", (req, res) => {
   res.set('Content-Type', 'text/html');
   Ingredient.find({}).exec(function (err, data){
     
-    res.render("createRecipe.ejs", {availableIngredients: data});
+    res.render("test.ejs", {availableIngredients: data});
   });
 });
 

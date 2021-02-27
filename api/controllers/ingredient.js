@@ -7,6 +7,14 @@ const app = express();
 // Return all recipes stored to user.
 exports.ingredient_get_all = (req, res, next) => {
     Ingredient.find().exec().then(docs => {
+        const data = docs;
+        console.log(data[0]);
+        res.send({ingredients: data});
+    }).catch(err => {
+        console.log(err);
+    })
+    /*
+    Ingredient.find().exec().then(docs => {
         const response = {
             count: docs.length,
             ingredients: docs.map(doc => {
@@ -38,7 +46,7 @@ exports.ingredient_get_all = (req, res, next) => {
             error: err
         });
     })
-    
+    */
 }
 
 exports.ingredient_get_one = (req, res, next) => {

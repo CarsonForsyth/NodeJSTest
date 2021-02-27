@@ -6,8 +6,6 @@ const express = require('express');
 
 module.exports = (req, res, next) => {
     try {
-        //const token = req.headers.authorization.split(" ")[1];
-        //const token = req.cookies.token.split(" ")[1];
         const token = req.cookies['token'];
         if (!token){
             console.log("Token not found");
@@ -16,7 +14,7 @@ module.exports = (req, res, next) => {
             })
         }
         console.log(token);
-        const decoded = jwt.verify(token, `process.env.JWT_KEY`);
+        const decoded = jwt.verify(token, 'process.env.JWT_KEY');
         req.userData = decoded;
         next(); 
     } catch (error) {

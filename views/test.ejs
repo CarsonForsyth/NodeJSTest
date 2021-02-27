@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Write a recipe</title>
+    
+    <link href="./styles.css" type="text/css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        function getIngredients() {
+            $.get("api/ingredient", function(data) {
+                document.getElementById("list").value = data.ingredients[0].name;
+            });
+        }
+    </script>
+    <script>
+        function postComponent(idNo){
+            $.post("api/component", {
+                steps: comp
+            })
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="background">
+
+
+<div class="l">
+    <input type="text" class="form-control" id="list" name="ingr" placeholder=""><br>
+    <button type="btn" class="btn btn-default" onclick="getIngredients()" >populate</button>
+    
+    <form action="/api/recipe" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder=""><br>
+
+        <label for="preface">Preface:</label>
+        <input type="text" class="form-control" id="preface" name="preface" placeholder=""><br>
+
+        
+
+        
+
+        <label for="compLabel">Components:</label>
+        <div id="container">
+        </div><br>
+        
+        <label for="steps">Steps:</label>
+        <input type="text" class="form-control" id="steps" name="steps" placeholder=""><br>
+
+        <label for="notes">Notes:</label>
+        <input type="text" class="form-control" id="notes" name="notes" placeholder=""><br>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+
+</div>
+
+
+</body>
+</html>

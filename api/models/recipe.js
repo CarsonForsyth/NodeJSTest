@@ -6,11 +6,21 @@ const recipeSchema = mongoose.Schema({
     title: { type: String, required: true },
     author: { type: String },
     components: [{
-        componentID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Component'},
-        quantity: { type: Number, default: 1 }
+        name: {type: String},
+        ingredients: [{name: {type: String}, 
+            _id: {type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient'},
+            quantity: {type: Number},
+            unit: {type: String, enum: ["g", "q", "p", "c", "floz", "tbsp", "tsp", "l", "ml", "lb", "oz", "kg", "g", "in", "cm", "u"]}
+        }], 
+        activeTime: {type: Number},      // Time actively working in minutes.
+        awayTime: {type: Number},        // Time in minutes.
+        steps: [{type: String}],
+        image: [{ type: String }],
+        quantity: {type: Number, default: 1}
     }],
     preface: { type: String},
     steps: [ { type: String } ],
+    servings: {type: Number, default: 1},
     notes: [ { type: String } ],
     updated: { type: Date, default: Date.now() },
     created: { type: Date, default: Date.now() },

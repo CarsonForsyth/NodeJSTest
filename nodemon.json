@@ -1,6 +1,7 @@
 {
     "env": {
         "MONGO_ATLAS_PW": "calmchamomile",
-        "JWT_KEY": "pomegranatepassion"
+        "JWT_KEY": "pomegranatepassion",
+        "unitEnum": "g q p c floz tbsp tsp l ml lb oz kg g in cm u"
     }
 }
