@@ -30,10 +30,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //app.engine('pug', require('pug').__express)
-app.set('views', __dirname + '/views');
+app.use('/views', express.static(__dirname + '/views/'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(__dirname + '/views/css'));
+//app.use(express.static(__dirname + '/views/css'));
 
 app.use('/api/recipe', recipeRoutes);
 app.use('/api/user', userRoutes);

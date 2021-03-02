@@ -1,14 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const authenticate = require('../auth/check-auth');
-
+const units = require('../../units.json')
 
 const Ingredient = require('../models/ingredient');
 
 const IngredientController = require('../controllers/ingredient');
 
 // handle get for all ingredients.
-router.get("/", IngredientController.ingredient_get_all)
+router.get("/", IngredientController.ingredient_get_all);
+
+router.get("/units", (req, res) => {
+    res.send({units: units.units});
+});
 // handle get for single ingredient by id.
 router.get("/:ingredientID", IngredientController.ingredient_get_one);
 

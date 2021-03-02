@@ -1,0 +1,4 @@
+{
+	"units": ["g", "q", "p", "c", "floz", "tbsp", "tsp", "l", "ml", "lb", "oz", "kg", "g", "in", "cm", "u"],
+	"measures": ["unit", "volume", "mass", "length"]
+}

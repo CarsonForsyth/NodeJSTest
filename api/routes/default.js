@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Recipe = require('./../models/recipe');
 const Ingredient = require('./../models/ingredient');
+
 const app = express();
 const bodyParser = require("body-parser");
-const { readSync } = require('fs');
+const { readSync } = require('fs')
+;
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -66,10 +68,11 @@ app.get("/login", (req, res) => {
 
 app.get("/createRecipe", (req, res) => {
   res.set('Content-Type', 'text/html');
-  Ingredient.find({}).exec(function (err, data){
+  /*Ingredient.find({}).exec(function (err, data){
     
-    res.render("test.ejs", {availableIngredients: data});
-  });
+    res.render("test.ejs", {availableIngredients: data, units: units.units});
+  });*/
+  res.render("test.ejs");
 });
 
 app.get("/createComponent", (req, res) => {
@@ -83,6 +86,18 @@ app.get("/createComponent", (req, res) => {
 
 app.get("/createIngredient", (req, res) => {
   res.render("createIngredient.ejs");
+});
+app.get("/ingredient/:ingredientID", (req, res) => {
+  Recipe.findOne({
+    _id: req.params.ingredientID
+  }).exec().then(doc => {
+    res.render("viewIngredient.ejs", {doc: doc});
+  });
+});
+
+app.post("/recipe", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
 });
 
 module.exports = app;

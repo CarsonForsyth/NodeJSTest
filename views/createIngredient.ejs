@@ -2,63 +2,42 @@
 <html lang="en">
 <head>
 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/views/css/bootstrap.css" rel="stylesheet" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <title>Create an Ingredient</title>
-
-    <link href="./styles.css" type="text/css" rel="stylesheet" />
    
 </head>
 
 <body>
 
 <div class="background">
+    <div class="main">
+        <form action="/api/ingredient" method="POST">
+            <label for="ingredientLabel">Create New Ingredient</label><br>
+            
+            <h4>Ingredient Name: </h4>
+            <input class="form-control" type="text" name="name"/>
 
+            
+            <button type="submit" class="btn btn-block btn-default">Submit</button>
 
-<div class="l">
-    <form action="/api/ingredient" method="POST">
-        <label for="ingredientLabel">Create New Ingredient</label><br>
-        
-        <label for="name">Name:</label>
-        <input type="text" class="form-control" id="name" name="name" placeholder=""><br>
-
-        
-        
-        <button type="button" class="btn btn-default" onclick="addUnitType()">Add a Unit Type</button>
-
-        <div id="typesContainer">
-            <script type='text/javascript'>
-                var list = '<option value="unit">Unit</option><option value="volume">Volume</option><option value="mass">Mass</option><option value="length">Length</option>';
-                var numTypes = 0;
-                function addUnitType(){
-                    var container = document.getElementById("typesContainer");
-                    container.appendChild(document.createTextNode("Type #" + ( numTypes+1 )));
-
-                    var input = document.createElement("select");
-                    input.setAttribute('name', 'unitType');
-                    input.setAttribute('id', 'type_' + ( numTypes ));
-                    input.setAttribute('class', "dynField");
-                    input.innerHTML = list;
-                    
-                    container.appendChild(input);
-                    container.appendChild(document.createElement("br"));
-                    numTypes += 1;
-                }
-                
-            </script>
-        </div>
-
-        <label for="modifier">Modifier:</label>
-        <input type="text" class="form-control" id="modifier" name="modifier" placeholder=""><br>
-
-        <label for="note">Note:</label>
-        <input type="text" class="form-control" id="note" name="note" placeholder=""><br>
-
-        <button type="submit" class="btn btn-default">Submit</button>
-
-    </form>
+        </form>
+        <h4>Current Ingredients: </h4>
+        <ul class="list-group" id="ingrList"></ul>
+    </div>
 </div>
 
-</div>
-
-
+<script src="/views/js/bootstrap.bundle.js" ></script>
+<script>
+    $.get("api/ingredient", function(data) {
+        var temp = data.ingredients.map(ingredient => {
+            return '<li class="list-group-item"><a href="./ingredient/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
+        }).join(" ");
+        document.getElementById("ingrList").innerHTML = temp;
+    });
+</script>
 </body>
 </html>

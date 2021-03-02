@@ -1,26 +1,36 @@
-<!DOCTYPE html>  
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <title>Ingredients</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/views/css/bootstrap.css" rel="stylesheet" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <title><%= doc.name %></title>
+   
 </head>
+
 <body>
-    <main><div class="row">
-        <% for(var i=0; i < ingredients.length; i++) { %>
-            <% if (i % 3 == 0){ console.log(i)%> <%}%>    
-            <div class="col-sm-1">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"> <%= ingredients[i].name %> </h5>
-                        <p class="card-text"><%= ingredients[i].modifier %></p>
-                        <p class="card-text"><%= ingredients[i].unitType %></p>
-                        <p class="card-text"><%= ingredients[i].note %></p>
-                    </div>
-                </div>
-            </div>
-            <% if (i % 3 == 0){ console.log(i)%> <%}%>    
-        <% } %></div>
-</main>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+<div class="background">
+    <div class="main">
+        
+        <h3>Viewing: </h3>
+        <h2><%= doc.name %></h2>
+        <h4>Current Ingredients: </h4>
+        <ul class="list-group" id="ingrList"></ul>
+    </div>
+</div>
+
+<script src="/views/js/bootstrap.bundle.js" ></script>
+<script>
+    $.get("api/ingredient", function(data) {
+        var temp = data.ingredients.map(ingredient => {
+            return '<li class="list-group-item"><a href="./ingredient/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
+        }).join(" ");
+        document.getElementById("ingrList").innerHTML = temp;
+    });
+</script>
 </body>
 </html>
