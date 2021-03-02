@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/views/css/bootstrap.css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <title><%= doc.name %></title>
+    <title><% =doc.name %></title>
    
 </head>
 
@@ -17,15 +17,16 @@
     <div class="main">
         
         <h3>Viewing: </h3>
-        <h2><%= doc.name %></h2>
+        <h2><% =doc.name %></h2>
         <h4>Current Ingredients: </h4>
+
         <ul class="list-group" id="ingrList"></ul>
     </div>
 </div>
 
 <script src="/views/js/bootstrap.bundle.js" ></script>
 <script>
-    $.get("api/ingredient", function(data) {
+    $.get("../api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
             return '<li class="list-group-item"><a href="./ingredient/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
         }).join(" ");

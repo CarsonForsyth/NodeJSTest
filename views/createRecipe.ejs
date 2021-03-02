@@ -16,15 +16,22 @@
 <div class="main">
     <input type="hidden" id="ingrListHTML"/>
     <input type="hidden" id="unitListHTML"/>
-    <form action="/recipe" method="POST">
-        <h2>Title:</h2>
-        <input type="text" class="form-control" id="title" name="title" placeholder=""><br>
-
-        <h4>Preface:</h4>
-        <input type="text" class="form-control" id="preface" name="preface" placeholder=""><br>
-
+    <form id="recipeForm" action="/api/recipe/" method="POST">
         
+        <input type="hidden" id="stpsCnt" value="1"/>
+        <input type="hidden" id="notesCnt" value="1"/>
         <input type="hidden" name="compCount" id="compCount" value="1" />
+        <div class="row">
+            <div class="col-md-2"><h4>Title:</h4></div>
+            <div class="col-md-8"><input type="text" class="form-control" id="title" name="title" placeholder=""></div>
+            <div class="col-md-1"><h4>Servings:</h4></div>
+            <div class="col-md-1"><input class="form-control" type="number" name="servings"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><h4>Preface:</h4></div>
+            <div class="col-md-10"><input type="text" class="form-control" id="preface" name="preface" placeholder=""></div>
+        </div>
+        
         <div id = components>
             <div id="component-1">
                 <input type="hidden" name="comp-1-stpsCnt" id="comp-1-stpsCnt" value="1" />
@@ -35,26 +42,28 @@
                     <div class="col-md-10"><input class="form-control" type="text" name="comp-1-name"/></div>
                 </div><div class="row">
                     <div class="col-md-2"><h5>Active Time: </h5></div>
-                    <div class="col-md-4"><input class="form-control" type="number" name="comp-1-activeTime"></div>
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-1-activeTime"></div>
                     <div class="col-md-2"><h5>Away Time: </h5></div>
-                    <div class="col-md-4"><input class="form-control" type="number" name="comp-1-awayTime"></div>
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-1-awayTime"></div>
+                    <div class="col-md-2"><h5>Quantity Needed: </h5></div>
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-1-needed"></div>
                 </div>
                 <h4>Ingredients:</h4>
                 <small>Press + to add another ingredient</small>
                 <div id="comp-1-ingredients">
                     <div class="row" id="comp-1-row-1">
                         <div class ="col-md-2"><input class="form-control" id="comp-1-quantity-1" type="number" name="comp-1-quantity"/></div>
-                        <div class ="col-md-6"><select class="form-control" id="comp-1-ingredient-1" name="comp-1-ingredients"></select></div>
                         <div class ="col-md-2"><select class="form-control" id="comp-1-unit-1" name="comp-1-unit"></select></div>
+                        <div class ="col-md-6"><select class="form-control" id="comp-1-ingredient-1" name="comp-1-ingredients"></select></div>
                         <div class ="col-md-2"><button id="addIngr-1" class="btn btn-block add-ingr" type="button">+</button></div>
                     </div>
                 </div>
-                <h4>Steps:</h4>
+                <h4>Component Steps:</h4>
                 <small>Press + to add another step</small>
                 <div id="comp-1-steps"> 
                     <div class="row"  id="comp-1-row-1" >
-                        <div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-1-step" type="text" placeholder="Step #1..."/></div>
-                        <div class="col-md-2"><button id="addStep-1" class="btn btn-block add-step" type="button">+</button></div>
+                        <div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-1-steps" type="text" placeholder="Step #1..."/></div>
+                        <div class="col-md-2"><button id="addCompStep-1" class="btn btn-block add-comp-step" type="button">+</button></div>
                     </div>
                 </div>
             </div>
@@ -63,10 +72,22 @@
         <button id="addComponent" class="btn add-component" type="button">Add a component</button>
         <button id="removeComponent" class="btn btn-danger remove-component" type="button">Remove a component</button><br>
 
+        <h4>Recipe Steps:</h4>
+        <div id="steps">
+            <div class="row" id="step-1" >
+                <div class="col-md-10"><input autocomplete="off" class="input form-control" name="steps" type="text" placeholder="Step #1..."/></div>
+                <div class="col-md-2"><button id="addStep" class="btn btn-block add-step" type="button">+</button></div>
+            </div>
+        </div>
         <h4>Notes:</h4>
-        <input type="text" class="form-control" id="notes" name="notes" placeholder=""><br>
+        <div id="notes">
+            <div class="row" id="note-1" >
+                <div class="col-md-10"><input autocomplete="off" class="input form-control" name="notes" type="text" placeholder="Note #1..."/></div>
+                <div class="col-md-2"><button id="addStep" class="btn btn-block add-note" type="button">+</button></div>
+            </div>
+        </div>
 
-        <button type="submit" class="btn btn-block btn-default">Submit</button>
+        <button type="submit" class="btn btn-block btn-default" id="submit">Submit</button>
 
     </form>
 </div>
@@ -77,14 +98,14 @@
     $.get("api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
             return '<option value='+ingredient.name+'>'+ingredient.name+'</option>';
-        });
+        }).join(" ");
         document.getElementById("ingrListHTML").value = temp;
         document.getElementById("comp-1-ingredient-1").innerHTML = temp;
     });
     $.get("api/ingredient/units", function(data) {
         var temp = data.units.map(unit => {
             return '<option value='+unit+'>'+unit+'</option>';
-        });
+        }).join(" ");
         document.getElementById("unitListHTML").value = temp;
         document.getElementById("comp-1-unit-1").innerHTML = temp;
     });
@@ -101,26 +122,28 @@
                     <div class="col-md-10"><input class="form-control" type="text" name="comp-'+compNo+'-name"/></div>\
                 </div><div class="row">\
                     <div class="col-md-2"><h5>Active Time: </h5></div>\
-                    <div class="col-md-4"><input class="form-control" type="number" name="comp-'+compNo+'-activeTime"></div>\
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-activeTime"></div>\
                     <div class="col-md-2"><h5>Away Time: </h5></div>\
-                    <div class="col-md-4"><input class="form-control" type="number" name="comp-'+compNo+'-awayTime"></div>\
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-awayTime"></div>\
+                    <div class="col-md-2"><h5>Quantity Needed: </h5></div>\
+                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-needed"></div>\
                 </div>\
                 <h4>Ingredients:</h4>\
                 <small>Press + to add another ingredient</small>\
                 <div id="comp-'+compNo+'-ingredients">\
                     <div class="row" id="comp-'+compNo+'-row-1">\
-                        <div class ="col-md-2"><input class="form-control" id="comp-'+compNo+'-quantity-'+ingrNo+'" type="number" name="comp-'+compNo+'-quantity"/></div>\
-                        <div class ="col-md-6"><select class="form-control" id="comp-'+compNo+'-ingredient-'+ingrNo+'" name="comp-'+compNo+'-ingredients"></select></div>\
-                        <div class ="col-md-2"><select class="form-control" id="comp-'+compNo+'-unit-'+ingrNo+'" name="comp-'+compNo+'-unit"></select></div>\
+                        <div class ="col-md-2"><input class="form-control" id="comp-'+compNo+'-quantity-1" type="number" name="comp-'+compNo+'-quantity"/></div>\
+                        <div class ="col-md-2"><select class="form-control" id="comp-'+compNo+'-unit-1" name="comp-'+compNo+'-unit">'+ document.getElementById("unitListHTML").value +'</select></div>\
+                        <div class ="col-md-6"><select class="form-control" id="comp-'+compNo+'-ingredient-1" name="comp-'+compNo+'-ingredients">'+ document.getElementById("ingrListHTML").value +'</select></div>\
                         <div class ="col-md-2"><button id="addIngr-'+compNo+'" class="btn btn-block add-ingr" type="button">+</button></div>\
                     </div>\
                 </div>\
-                <h4>Steps:</h4>\
+                <h4>Component Steps:</h4>\
                 <small>Press + to add another step</small>\
                 <div id="comp-'+compNo+'-steps"> \
                     <div class="row"  id="comp-'+compNo+'-row-1" >\
-                        <div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+compNo+'-step" type="text" placeholder="Step #1..."/></div>\
-                        <div class="col-md-2"><button id="addStep-'+compNo+'" class="btn btn-block add-step" type="button">+</button></div>\
+                        <div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+compNo+'-steps" type="text" placeholder="Step #1..."/></div>\
+                        <div class="col-md-2"><button id="addStep-'+compNo+'" class="btn btn-block add-comp-step" type="button">+</button></div>\
                     </div>\
                 </div>';
         nextComp.innerHTML = temp;
@@ -139,21 +162,27 @@
     });
 
     document.addEventListener('click', event => {
-        if (event.target.classList.contains("add-step")){
+        if (event.target.classList.contains("add-comp-step")){
             event.preventDefault();
             compNo = event.target.id.split("-")[1];
             var stepNo = parseInt(document.getElementById("comp-" + compNo + "-stpsCnt").value) + 1;
+            console.log(stepNo);
             var nextStep = document.createElement("div");
             nextStep.setAttribute("class", "row");
             nextStep.setAttribute("id", 'comp-'+ compNo +'-row-' + stepNo);
-            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+ compNo +'-step" type="text"></div>\
-            <div class="col-md-2"><button id="comp-'+ compNo +'-remove-' + stepNo + '" class="btn btn-block btn-danger remove-step" >-</button></div>';
+            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+ compNo +'-steps" type="text"></div>\
+            <div class="col-md-2"><button id="comp-'+ compNo +'-remove-' + stepNo + '" class="btn btn-block btn-danger remove-comp-step" >-</button></div>';
             document.getElementById("comp-"+ compNo +"-steps").appendChild(nextStep);
-            document.getElementById("comp-" + compNo + "-stpsCnt").val = stepNo;
+            document.getElementById("comp-" + compNo + "-stpsCnt").value = stepNo;
         }
-        else if (event.target.classList.contains("remove-step")){
+        else if (event.target.classList.contains("remove-comp-step")){
             event.preventDefault();
-            event.target.parentElement.parentElement.remove();
+            try{
+                event.target.parentElement.parentElement.remove();
+                document.getElementById("comp-" + compNo + "-stpsCnt").value -= 1;
+            }catch {
+                console.log("error");
+            }
         }
         else if (event.target.classList.contains("add-ingr")){
             event.preventDefault();
@@ -163,8 +192,8 @@
             nextIngr.setAttribute("class", "row");
             nextIngr.setAttribute("id", 'comp-'+ compNo +'-row-' + ingrNo);
             var temp = '<div class ="col-md-2"><input class="form-control" type="number" id="comp-'+ compNo +'-quantity-'+ingrNo+'" name="comp-'+ compNo +'-quantity"/></div>';
-            temp += '<div class ="col-md-6"><select class="form-control" type="text" id="comp-'+ compNo +'-ingredient-'+ingrNo+'" name="comp-'+ compNo +'-ingredients">' + document.getElementById("ingrListHTML").value + '</select></div>';
             temp += '<div class ="col-md-2"><select class="form-control" type="text" id="comp-'+ compNo +'-unit-'+ingrNo+'" name="comp-'+ compNo +'-unit">'+ document.getElementById("unitListHTML").value +'</select></div>';
+            temp += '<div class ="col-md-6"><select class="form-control" type="text" id="comp-'+ compNo +'-ingredient-'+ingrNo+'" name="comp-'+ compNo +'-ingredients">' + document.getElementById("ingrListHTML").value + '</select></div>';
             temp += '<div class ="col-md-2"><button id="comp-'+ compNo +'-remove-' + ingrNo + ' " class="btn btn-block btn-danger remove-ingr" >-</button></div>';
             temp += '</div>';
             nextIngr.innerHTML = temp;
@@ -173,7 +202,56 @@
         }
         else if (event.target.classList.contains("remove-ingr")){
             event.preventDefault();
-            event.target.parentElement.parentElement.remove();
+            try{
+                event.target.parentElement.parentElement.remove();
+                document.getElementById("comp-" + compNo + "-ingrCnt").value -= 1;
+            } catch {
+                console.log("error");
+            }
+        }
+        else if (event.target.classList.contains("add-step")){
+            event.preventDefault();
+            var stepNo = parseInt(document.getElementById("stpsCnt").value) + 1;
+            var nextStep = document.createElement("div");
+            nextStep.setAttribute("class", "row");
+            nextStep.setAttribute("id", 'step-' + stepNo);
+            
+            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="steps" type="text"></div>\
+            <div class="col-md-2"><button id="remove-' + stepNo + '" class="btn btn-block btn-danger remove-step" >-</button></div>';
+
+            document.getElementById("steps").appendChild(nextStep);
+            document.getElementById("stpsCnt").value = stepNo;
+        }
+        else if (event.target.classList.contains("remove-step")){
+            event.preventDefault();
+            try{
+                event.target.parentElement.parentElement.remove();
+                document.getElementById("stpsCnt").value -= 1;
+            } catch {
+                console.log("error");
+            }
+        }
+        else if (event.target.classList.contains("add-note")){
+            event.preventDefault();
+            var notesNo = parseInt(document.getElementById("notesCnt").value) + 1;
+            var nextNote = document.createElement("div");
+            nextNote.setAttribute("class", "row");
+            nextNote.setAttribute("id", 'note-' + notesNo);
+            
+            nextNote.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="notes" type="text"></div>\
+            <div class="col-md-2"><button id="remove-' + notesNo + '" class="btn btn-block btn-danger remove-note" >-</button></div>';
+
+            document.getElementById("notes").appendChild(nextNote);
+            document.getElementById("notesCnt").value = notesNo;
+        }
+        else if (event.target.classList.contains("remove-note")){
+            event.preventDefault();
+            try{
+                event.target.parentElement.parentElement.remove();
+                document.getElementById("notesCnt").value -= 1;
+            } catch {
+                console.log("error");
+            }
         }
     })
 </script>

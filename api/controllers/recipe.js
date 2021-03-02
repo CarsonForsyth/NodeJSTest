@@ -60,38 +60,76 @@ exports.recipe_get_one = (req, res, next) => {
 
 
 exports.recipe_post = (req, res, next) => {
-    console.log(req);
+    var data = req.body;
+    console.log(data);
+    var components = new Object();
+    for ( var i = 1; i <= data.compCount; i ++ ){
+        var comp = {};
+        var cur ='comp-'+i;
+        comp.activeTime = data[cur+"-activeTime"];
+        comp.awayTime = data[cur+"-awayTime"];
+        if (parseInt(data[cur+"-ingrCnt"]) == 1){
+            console.log(data[cur+"-ingredients"])
+            comp["ingredients"] = {"quantity": data[cur+"-quantity"], "name": data[cur+"-ingredients"], "unit": data[cur+"-unit"]};
+        }
+        else {
+            var ingredients = [{}];
+            for ( var j = 0; j < parseInt(data[cur+"-ingrCnt"]) ; j ++ ) {
+                console.log(data[cur+"-ingredients"][j])
+                ingredients[j] = {"quantity": data[cur+"-quantity"][j], "name": data[cur+"-ingredients"][j], "unit": data[cur+"-unit"][j]};
+                console.log(ingredients[j])
+            }
+            comp["ingredients"] = ingredients;
+        }
+        
+        if (parseInt(data[cur+"-stpsCnt"]) == 1){
+            comp.steps = data[cur+"-steps"];
+        }
+        else {
+            var steps = [{}];
+            for ( var k = 0; k < parseInt(data[cur+"-stpsCnt"]) ; k ++ ) {
+                steps[k] = data[cur+"-steps"][k];
+            }
+            comp["steps"] = steps;
+        }
+        console.log(comp);
+        if (data.compCount == 1){
+            components = comp;
+        }
+        else{
+        components[i] = comp;
+        }
+    }
+    console.log(components);
+    if (!req.body.servings){
+        req.body.servings = 1;
+    }
+    else if (req.body.servings == '' || isNaN(req.body.servings)){
+        req.body.servings = 1;
+    }
     const recipe = new Recipe({
         _id: new mongoose.Types.ObjectId(),
-        title: req.body.title.split(" ").map((word) => { return word[0].toUpperCase() + word.substring(1).toLowerCase() ; }).join(" "),
-        author: req.userData.name,
-        components: {
-            componentID: new mongoose.Types.ObjectId()
-        },
+        title: req.body.title,
+        author: "Carson Forsyth",
+        
         //recipeImage: req.file.path,
         preface: req.body.preface,
+        components: components,
         steps: req.body.steps,
         notes: req.body.notes,
-        updated: req.body.updated,
-        created: req.body.created
+        updated: Date.now(),
+        created: Date.now()
     });
+    
+    console.log(recipe);
     recipe
         .save()
         .then(result => {
-            res.status(201).json({
-                createdRecipe: {
-                    title: result.title,
-                    author: result.author,
-                    _id: result._id,
-                    image: result.filename,
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:3000/recipe/' + result._id
-                    }
-                }
-            })
+            res.redirect("../../viewrecipe/"+result._id)
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err)
+        });
 }
 
 exports.recipe_patch = (req, res, next) => {

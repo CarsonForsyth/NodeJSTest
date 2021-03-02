@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/views/css/bootstrap.css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <title>Upload an Ingredient</title>
+    <title>Combine an Ingredient</title>
    
 </head>
 
@@ -22,9 +22,13 @@
             <input class="form-control" type="text" name="name"/>
 
             
-            <button type="submit" class="btn btn-block btn-outline-primary">Submit</button>
+            
 
         </form>
+        <button type="button" class="btn-primary btn-block btn">Submit</button>
+        <button type="button" class="btn-primary btn-block btn">Submit</button>
+        <button type="button" class="btn-primary btn-block btn">Submit</button>
+        
         <h4>Current Ingredients: </h4>
         <ul class="list-group" id="ingrList"></ul>
     </div>
@@ -32,9 +36,13 @@
 
 <script src="/views/js/bootstrap.bundle.js" ></script>
 <script>
+    $('.btn').click(function () {
+            $(this).toggleClass("active"); //addCss("active");
+        })
+
     $.get("api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
-            return '<li class="list-group-item"><a href="./ingredient/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
+            return '<li class="list-group-item" value="'+ ingredient._id +'">'+ingredient.name+'</li>';
         }).join(" ");
         document.getElementById("ingrList").innerHTML = temp;
     });

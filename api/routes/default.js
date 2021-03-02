@@ -46,6 +46,7 @@ app.get("/viewRecipe/:recipeID", (req, res) => {
   }).populate('components').exec()
   .then(doc => {
     console.log(doc);
+    console.log(doc.ingredients);
     res.set('Content-Type', 'text/html');
     /*for (var i = 0 ; i < doc.components.length ; i ++) {
       for (var j = 0 ; j < doc.components[i].steps.length ; i ++ ) {
@@ -72,7 +73,7 @@ app.get("/createRecipe", (req, res) => {
     
     res.render("test.ejs", {availableIngredients: data, units: units.units});
   });*/
-  res.render("test.ejs");
+  res.render("createRecipe.ejs");
 });
 
 app.get("/createComponent", (req, res) => {
@@ -87,17 +88,25 @@ app.get("/createComponent", (req, res) => {
 app.get("/createIngredient", (req, res) => {
   res.render("createIngredient.ejs");
 });
+app.get("/combineIngredient", (req, res) => {
+  res.render("combineIngredient.ejs");
+});
+
 app.get("/ingredient/:ingredientID", (req, res) => {
-  Recipe.findOne({
+  Ingredient.findOne({
     _id: req.params.ingredientID
   }).exec().then(doc => {
+    console.log(doc);
     res.render("viewIngredient.ejs", {doc: doc});
+  }).catch(err => {
+    console.log(err);
   });
 });
 
 app.post("/recipe", (req, res) => {
   console.log(req.body);
-  res.send(req.body);
+  res.status(200);
+  res.send(req.body.name);
 });
 
 module.exports = app;

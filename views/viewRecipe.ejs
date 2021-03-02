@@ -27,7 +27,7 @@
         <div id="notes" data=<%=JSON.stringify(doc.notes)%>></div>
       </div>
     </main>
-  <script src="/views/js/bootstrap.bundle.min.js" ></script>
+  <script src="/views/js/bootstrap.bundle.js" ></script>
   <script>
       var div = document.getElementById("component");
       var components = JSON.parse(div.getAttribute("data"));
@@ -38,7 +38,7 @@
           inner += '<small class="text-muted">' + components[i].quantity + ' needed </small><br>';
           inner += 'Ingredients: <br>';
           for (var j = 0; j < components[i].ingredients.length; j ++ ){
-              inner += j+1 + ' ' + components[i].ingredients[j] + '<br>';
+              inner += components[i].ingredients[j].quantity + ' '+ components[i].ingredients[j].unit + ' ' + components[i].ingredients[j].name +'<br>';
           }
           inner += 'Steps: <br>';
           for (var j = 0; j < components[i].steps.length; j ++ ){

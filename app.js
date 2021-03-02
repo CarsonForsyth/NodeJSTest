@@ -8,7 +8,6 @@ var path = require('path');
 
 const recipeRoutes = require('./api/routes/recipe');
 const userRoutes = require('./api/routes/user');
-const componentRoutes = require('./api/routes/component');
 const ingredientRoutes = require('./api/routes/ingredient');
 const defaultRoutes = require('./api/routes/default');
 
@@ -37,7 +36,6 @@ app.set('view engine', 'ejs');
 
 app.use('/api/recipe', recipeRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/component', componentRoutes);
 app.use('/api/ingredient', ingredientRoutes);
 app.use('/', defaultRoutes);
 
