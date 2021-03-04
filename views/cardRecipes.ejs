@@ -1,0 +1,31 @@
+<div id="recipes">
+
+</div>
+<script>
+    $.get("../api/recipe", function(data) {
+        var recipes = data.recipes;
+        //console.log(data);
+        for ( var i = 0 ; i < recipes.length ; i ++ ){
+            var card = document.createElement("div");
+            card.setAttribute("class", "card");
+            card.setAttribute("width", "18rem");
+            var body = document.createElement("div");
+            body.setAttribute("class", "card-body");
+            var title = document.createElement("h5");
+            title.setAttribute("class", "card-title");
+            title.innerHTML = recipes[i].title;
+            var desc = document.createElement("p");
+            desc.setAttribute("class", "card-text");
+            desc.innerHTML = recipes[i].description;
+            var link = document.createElement("a");
+            link.setAttribute("href", "../recipes/"+recipes[i]._id);
+            link.setAttribute("class", "btn btn-primary");
+            link.innerHTML = "View this Recipe"
+            body.append(title, desc, link);
+            card.append(body);
+            document.getElementById("recipes").appendChild(card);
+        }
+    });
+    console.log(JSON.stringify(recipes))
+    
+</script>

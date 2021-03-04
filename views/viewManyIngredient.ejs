@@ -7,25 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/views/css/bootstrap.css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <title>Upload an Ingredient</title>
+    <title>See Ingredients</title>
    
 </head>
 
 <body>
+
 <%- include('navbar.ejs') %>
+
 <div class="background">
     <div class="main">
-        <form action="/api/ingredient" method="POST">
-            <h2>Upload a new Ingredient</h2>
-            
-            <h4>Ingredient Name: </h4>
-            <input class="form-control" type="text" name="name"/>
-
-            
-            <button type="submit" class="btn btn-block btn-outline-primary">Submit</button>
-
-        </form>
+        
         <h4>Current Ingredients: </h4>
+
         <ul class="list-group" id="ingrList"></ul>
     </div>
 </div>
@@ -34,10 +28,17 @@
 <script>
     $.get("../api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
-            return '<li class="list-group-item"><a href="../ingredients/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
+            return '<li class="list-group-item"><a href="./ingredients/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
         }).join(" ");
         document.getElementById("ingrList").innerHTML = temp;
     });
+    
+    $(function () {
+        $('nav li a').filter(function () {
+            return this.href === location.href;
+        }).addClass('active');
+    });
+    
 </script>
 </body>
 </html>

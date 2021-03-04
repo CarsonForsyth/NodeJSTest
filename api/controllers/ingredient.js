@@ -84,19 +84,7 @@ exports.ingredient_post = (req, res, next) => {
         .save()
         .then(result => {
             console.log(result);
-            res.status(201).json({
-                createdIngredient: {
-                    name: result.name,
-                    _id: result._id,
-                    unitType: result.unitType,
-                    modifier: result.modifier,
-                    note: result.note,
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:3000/api/ingredient/' + result._id
-                    }
-                }
-            });
+            res.redirect("../../ingredients/new")
         })
         .catch(err => console.log(err));
 }

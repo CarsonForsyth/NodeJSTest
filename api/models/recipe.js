@@ -5,6 +5,7 @@ const recipeSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: { type: String, required: true },
     author: { type: String },
+    description: { type: String },
     components: [{
         name: {type: String},
         ingredients: [{name: {type: String}, 

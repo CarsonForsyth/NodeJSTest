@@ -10,7 +10,7 @@
 </head>
 
 <body>
-
+<%- include('navbar.ejs') %>
 <div class="background">
 
 <div class="main">
@@ -28,6 +28,10 @@
             <div class="col-md-1"><input class="form-control" type="number" name="servings"></div>
         </div>
         <div class="row">
+            <div class="col-md-2"><h4>Recipe Description:</h4></div>
+            <div class="col-md-10"><input type="text" class="form-control" id="description" name="description" placeholder="A short description..."></div>
+        </div>
+        <div class="row">
             <div class="col-md-2"><h4>Preface:</h4></div>
             <div class="col-md-10"><input type="text" class="form-control" id="preface" name="preface" placeholder=""></div>
         </div>
@@ -38,7 +42,7 @@
                 <input type="hidden" name="comp-1-ingrCnt" id="comp-1-ingrCnt" value="1" />
                 <h3>Component 1:</h3>
                 <div class="row">
-                    <div class="col-md-2"><h4>Component Title: </h4></div>
+                    <div class="col-md-2"><h4>Component Name: </h4></div>
                     <div class="col-md-10"><input class="form-control" type="text" name="comp-1-name"/></div>
                 </div><div class="row">
                     <div class="col-md-2"><h5>Active Time: </h5></div>
@@ -95,14 +99,14 @@
 </div>
 <script src="/views/js/bootstrap.bundle.js" ></script>
 <script>
-    $.get("api/ingredient", function(data) {
+    $.get("../api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
             return '<option value='+ingredient.name+'>'+ingredient.name+'</option>';
         }).join(" ");
         document.getElementById("ingrListHTML").value = temp;
         document.getElementById("comp-1-ingredient-1").innerHTML = temp;
     });
-    $.get("api/ingredient/units", function(data) {
+    $.get("../api/ingredient/units", function(data) {
         var temp = data.units.map(unit => {
             return '<option value='+unit+'>'+unit+'</option>';
         }).join(" ");
@@ -114,38 +118,7 @@
         var compNo = parseInt(document.getElementById("compCount").value) + 1;
         var nextComp = document.createElement("div");
         nextComp.setAttribute("id", "component-" + compNo);
-        var temp = '<input type="hidden" name="comp-'+compNo+'-stpsCnt" id="comp-'+compNo+'-stpsCnt" value="1" />\
-                <input type="hidden" name="comp-'+compNo+'-ingrCnt" id="comp-'+compNo+'-ingrCnt" value="1" />\
-                <h3>Component '+compNo+':</h3>\
-                <div class="row">\
-                    <div class="col-md-2"><h4>Component Title: </h4></div>\
-                    <div class="col-md-10"><input class="form-control" type="text" name="comp-'+compNo+'-name"/></div>\
-                </div><div class="row">\
-                    <div class="col-md-2"><h5>Active Time: </h5></div>\
-                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-activeTime"></div>\
-                    <div class="col-md-2"><h5>Away Time: </h5></div>\
-                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-awayTime"></div>\
-                    <div class="col-md-2"><h5>Quantity Needed: </h5></div>\
-                    <div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-needed"></div>\
-                </div>\
-                <h4>Ingredients:</h4>\
-                <small>Press + to add another ingredient</small>\
-                <div id="comp-'+compNo+'-ingredients">\
-                    <div class="row" id="comp-'+compNo+'-row-1">\
-                        <div class ="col-md-2"><input class="form-control" id="comp-'+compNo+'-quantity-1" type="number" name="comp-'+compNo+'-quantity"/></div>\
-                        <div class ="col-md-2"><select class="form-control" id="comp-'+compNo+'-unit-1" name="comp-'+compNo+'-unit">'+ document.getElementById("unitListHTML").value +'</select></div>\
-                        <div class ="col-md-6"><select class="form-control" id="comp-'+compNo+'-ingredient-1" name="comp-'+compNo+'-ingredients">'+ document.getElementById("ingrListHTML").value +'</select></div>\
-                        <div class ="col-md-2"><button id="addIngr-'+compNo+'" class="btn btn-block add-ingr" type="button">+</button></div>\
-                    </div>\
-                </div>\
-                <h4>Component Steps:</h4>\
-                <small>Press + to add another step</small>\
-                <div id="comp-'+compNo+'-steps"> \
-                    <div class="row"  id="comp-'+compNo+'-row-1" >\
-                        <div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+compNo+'-steps" type="text" placeholder="Step #1..."/></div>\
-                        <div class="col-md-2"><button id="addStep-'+compNo+'" class="btn btn-block add-comp-step" type="button">+</button></div>\
-                    </div>\
-                </div>';
+        var temp = '<input type="hidden" name="comp-'+compNo+'-stpsCnt" id="comp-'+compNo+'-stpsCnt" value="1" /><input type="hidden" name="comp-'+compNo+'-ingrCnt" id="comp-'+compNo+'-ingrCnt" value="1" /><h3>Component '+compNo+':</h3><div class="row"><div class="col-md-2"><h4>Component Title: </h4></div><div class="col-md-10"><input class="form-control" type="text" name="comp-'+compNo+'-name"/></div></div><div class="row"><div class="col-md-2"><h5>Active Time: </h5></div><div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-activeTime"></div><div class="col-md-2"><h5>Away Time: </h5></div><div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-awayTime"></div><div class="col-md-2"><h5>Quantity Needed: </h5></div><div class="col-md-2"><input class="form-control" type="number" name="comp-'+compNo+'-needed"></div></div><h4>Ingredients:</h4><small>Press + to add another ingredient</small><div id="comp-'+compNo+'-ingredients"><div class="row" id="comp-'+compNo+'-row-1"><div class ="col-md-2"><input class="form-control" id="comp-'+compNo+'-quantity-1" type="number" name="comp-'+compNo+'-quantity"/></div><div class ="col-md-2"><select class="form-control" id="comp-'+compNo+'-unit-1" name="comp-'+compNo+'-unit">'+ document.getElementById("unitListHTML").value +'</select></div><div class ="col-md-6"><select class="form-control" id="comp-'+compNo+'-ingredient-1" name="comp-'+compNo+'-ingredients">'+ document.getElementById("ingrListHTML").value +'</select></div><div class ="col-md-2"><button id="addIngr-'+compNo+'" class="btn btn-block add-ingr" type="button">+</button></div></div></div><h4>Component Steps:</h4><small>Press + to add another step</small><div id="comp-'+compNo+'-steps"> <div class="row"  id="comp-'+compNo+'-row-1" ><div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+compNo+'-steps" type="text" placeholder="Step #1..."/></div><div class="col-md-2"><button id="addStep-'+compNo+'" class="btn btn-block add-comp-step" type="button">+</button></div></div></div>';
         nextComp.innerHTML = temp;
         document.getElementById("components").appendChild(nextComp);
         document.getElementById("compCount").value = compNo;
@@ -170,8 +143,7 @@
             var nextStep = document.createElement("div");
             nextStep.setAttribute("class", "row");
             nextStep.setAttribute("id", 'comp-'+ compNo +'-row-' + stepNo);
-            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+ compNo +'-steps" type="text"></div>\
-            <div class="col-md-2"><button id="comp-'+ compNo +'-remove-' + stepNo + '" class="btn btn-block btn-danger remove-comp-step" >-</button></div>';
+            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="comp-'+ compNo +'-steps" type="text"></div><div class="col-md-2"><button id="comp-'+ compNo +'-remove-' + stepNo + '" class="btn btn-block btn-danger remove-comp-step" >-</button></div>';
             document.getElementById("comp-"+ compNo +"-steps").appendChild(nextStep);
             document.getElementById("comp-" + compNo + "-stpsCnt").value = stepNo;
         }
@@ -215,10 +187,7 @@
             var nextStep = document.createElement("div");
             nextStep.setAttribute("class", "row");
             nextStep.setAttribute("id", 'step-' + stepNo);
-            
-            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="steps" type="text"></div>\
-            <div class="col-md-2"><button id="remove-' + stepNo + '" class="btn btn-block btn-danger remove-step" >-</button></div>';
-
+            nextStep.innerHTML = '<div class="col-md-10"><input autocomplete="off" class="input form-control" name="steps" type="text"></div>\<div class="col-md-2"><button id="remove-' + stepNo + '" class="btn btn-block btn-danger remove-step" >-</button></div>';
             document.getElementById("steps").appendChild(nextStep);
             document.getElementById("stpsCnt").value = stepNo;
         }

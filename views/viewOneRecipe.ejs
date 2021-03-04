@@ -1,0 +1,124 @@
+<!DOCTYPE html>  
+<html>  
+<head>
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/views/css/bootstrap.css" rel="stylesheet" >
+    <title> <%= doc.title %> </title>
+</head>
+
+    
+<body>
+<%- include('navbar.ejs') %>
+    <main class="container">
+      <div class="main">
+        <div class="text-center py-5 px-3">
+            <h1><%= doc.title %></h1>
+            <p class="lead">by <%= doc.author %><br></p>
+            <small class="text-muted">Created on <%= doc.created.toLocaleDateString()%> and last updated on <%= doc.updated.toLocaleDateString()%></small>
+            
+        </div>
+        <h4>Recipe Description:</h4>
+        <p><%= doc.description %></p>
+        <p>Creates <%= doc.servings%> serving(s). </p>
+        <div id="preface" data="<%=(doc.preface)%>"></div>
+        <div id="component" data="<%=JSON.stringify(doc.components)%>"></div>
+        <div id="steps" data="<%=JSON.stringify(doc.steps)%>"></div>
+        <div id="notes" data="<%=JSON.stringify(doc.notes)%>"></div>
+      </div>
+    </main>
+  <script src="/views/js/bootstrap.bundle.js" ></script>
+  <script>
+        
+        var div;
+        div = document.getElementById("preface");
+        var preface = div.getAttribute("data");
+        if (!!preface){
+            element = document.createElement("h3");
+            element.innerHTML = 'Preface:';
+            div.appendChild(element);
+            element = document.createElement("p");
+            element.innerHTML = preface;
+            div.appendChild(element);
+        }
+
+        div = document.getElementById("component");
+        var components = JSON.parse(div.getAttribute("data"));
+        var inner;
+        for (var i = 0; i < components.length; i ++ ){
+            element = document.createElement("h4");
+            element.innerHTML = components[i].title+'';
+            div.appendChild(element);
+            element = document.createElement("small");
+            element.innerHTML = components[i].quantity + ' needed';
+            div.appendChild(element);
+            element = document.createElement("h5");
+            element.innerHTML = 'Ingredients:';
+            div.appendChild(element);
+            element = document.createElement("ul");
+            inner = '';
+            for (var j = 0; j < components[i].ingredients.length; j ++ ){
+                inner += '<li>' + components[i].ingredients[j].quantity + ' '+ components[i].ingredients[j].unit + ' ' + components[i].ingredients[j].name +'</li>';
+            }
+            element.innerHTML = inner;
+            div.appendChild(element);
+            element = document.createElement("h5");
+            element.innerHTML = 'Steps:';
+            div.appendChild(element);
+            element = document.createElement("ul");
+            inner = '';
+            for (var j = 0; j < components[i].steps.length; j ++ ){
+                inner += '<li>' + components[i].steps[j] +'</li>';
+            }
+            element.innerHTML = inner;
+            div.appendChild(element);
+            
+          /*
+          inner += '<h5>' + components[i].name + '</h5>';
+          inner += '<small class="text-muted">' + components[i].quantity + ' needed </small><br>';
+          inner += 'Ingredients: <br>';
+          for (var j = 0; j < components[i].ingredients.length; j ++ ){
+              inner += components[i].ingredients[j].quantity + ' '+ components[i].ingredients[j].unit + ' ' + components[i].ingredients[j].name +'<br>';
+          }
+          inner += 'Steps: <br>';
+          for (var j = 0; j < components[i].steps.length; j ++ ){
+              inner += j+1 + ' ' + components[i].steps[j] + '<br>';
+          }*/
+        }
+        div = document.getElementById("steps");
+        var steps = JSON.parse(div.getAttribute("data"));
+        if (steps.length > 0){
+            element = document.createElement("h4");
+            element.innerHTML = 'Recipe Steps:';
+            div.appendChild(element);
+            element = document.createElement("ol");
+            var inner = '';
+            for (var i = 0 ; i < steps.length ; i ++ ) {
+                inner += '<li>' + steps[i] + '</li>';
+            }
+            element.innerHTML = inner;
+            div.appendChild(element);
+        }
+
+        div = document.getElementById("notes");
+        var notes = JSON.parse(div.getAttribute("data"));
+        if (notes.length > 0){
+            element = document.createElement("h4");
+            element.innerHTML = 'Additional Notes:';
+            div.appendChild(element);
+            element = document.createElement("ul");
+            var inner = '';
+            for (var i = 0 ; i < notes.length ; i ++ ) {
+                inner += '<li>' + notes[i] + '</li>';
+            }
+            element.innerHTML = inner;
+            div.appendChild(element);
+        }
+        
+        
+
+  </script>
+</body>
+</html>  

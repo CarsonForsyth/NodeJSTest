@@ -7,7 +7,7 @@ const app = express();
 // Return all recipes stored to user.
 exports.recipe_get_all = (req, res, next) => {
     Recipe.find().select('title author _id').exec().then(docs => {
-        const response = {
+        /*const response = {
             count: docs.length,
             recipes: docs.map(doc => {
                 return {
@@ -20,11 +20,11 @@ exports.recipe_get_all = (req, res, next) => {
                     }
                 }
             })
-        }
+        }*/
         if (docs.length > 0) {
-            res.status(200).json(response);
+            res.send({recipes: docs});
         } else {
-            res.status(200).json({
+            res.status(200).send({
                 message: "No valid recipe entries"
             });
         }
@@ -66,6 +66,7 @@ exports.recipe_post = (req, res, next) => {
     for ( var i = 1; i <= data.compCount; i ++ ){
         var comp = {};
         var cur ='comp-'+i;
+        comp.name = data[cur+"-name"]
         comp.activeTime = data[cur+"-activeTime"];
         comp.awayTime = data[cur+"-awayTime"];
         if (parseInt(data[cur+"-ingrCnt"]) == 1){
@@ -111,7 +112,7 @@ exports.recipe_post = (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         author: "Carson Forsyth",
-        
+        description: req.body.description,
         //recipeImage: req.file.path,
         preface: req.body.preface,
         components: components,
@@ -125,7 +126,7 @@ exports.recipe_post = (req, res, next) => {
     recipe
         .save()
         .then(result => {
-            res.redirect("../../viewrecipe/"+result._id)
+            res.redirect("../../recipes/"+result._id)
         })
         .catch(err => {
             console.log(err)

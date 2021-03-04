@@ -5,8 +5,8 @@ const Ingredient = require('./../models/ingredient');
 
 const app = express();
 const bodyParser = require("body-parser");
-const { readSync } = require('fs')
-;
+const { readSync } = require('fs');
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -17,43 +17,36 @@ mongoose.connect("mongodb+srv://recipeDB:" + process.env.MONGO_ATLAS_PW + "@node
     useUnifiedTopology: true
 });
 
-/* GET home page. */
 
 app.get("/", (req, res) => {
-  const recipes = Recipe.find({}).select('title author').exec().then(docs => {
-    console.log(docs);
-    res.render("index.ejs", {title: 'cooking', 
-      recipes: docs.map(doc => {
-        return {
-            title: doc.title,
-            author: doc.author,
-            _id: doc._id,
-            url: 'http://localhost:3000/find/' + doc._id
-        }
-    })
-});
-    }).catch(err => {
-      console.log(err);
-      res.status(500).json({
-          error: err
-      });
-  })
+  
+    res.render("index.ejs");
+    
 });
 
-app.get("/viewRecipe/:recipeID", (req, res) => {
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+
+app.get("/recipes", (req, res) => {
+  console.log("here")
+  res.render("viewManyRecipe.ejs");
+});
+
+app.get("/recipes/new", (req, res) => {
+  console.log("here")
+  res.render("createRecipe.ejs");
+});
+
+app.get("/recipes/:recipeID", (req, res) => {
   recipe = Recipe.findOne({
     _id: req.params.recipeID
   }).populate('components').exec()
   .then(doc => {
-    console.log(doc);
-    console.log(doc.ingredients);
+    console.log(doc)
     res.set('Content-Type', 'text/html');
-    /*for (var i = 0 ; i < doc.components.length ; i ++) {
-      for (var j = 0 ; j < doc.components[i].steps.length ; i ++ ) {
-
-      }
-    }*/
-    res.render("viewRecipe.ejs", {doc: doc})
+    res.render("viewOneRecipe.ejs", {doc: doc})
   })
   .catch(err => {
     console.log(err);
@@ -63,50 +56,28 @@ app.get("/viewRecipe/:recipeID", (req, res) => {
   })
 });
 
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
 
-app.get("/createRecipe", (req, res) => {
-  res.set('Content-Type', 'text/html');
-  /*Ingredient.find({}).exec(function (err, data){
-    
-    res.render("test.ejs", {availableIngredients: data, units: units.units});
-  });*/
-  res.render("createRecipe.ejs");
-});
 
-app.get("/createComponent", (req, res) => {
-  res.set('Content-Type', 'text/html');
-  Ingredient.find({}).exec(function (err, data){
-    
-    res.render("createComponent.ejs", {availableIngredients: data});
-  });
-  
-});
 
-app.get("/createIngredient", (req, res) => {
+
+app.get("/ingredients/new", (req, res) => {
   res.render("createIngredient.ejs");
 });
-app.get("/combineIngredient", (req, res) => {
-  res.render("combineIngredient.ejs");
+
+app.get("/ingredients", (req, res) => {
+  res.render("viewManyIngredient.ejs")
 });
 
-app.get("/ingredient/:ingredientID", (req, res) => {
+app.get("/ingredients/:ingredientID", (req, res) => {
   Ingredient.findOne({
     _id: req.params.ingredientID
   }).exec().then(doc => {
     console.log(doc);
-    res.render("viewIngredient.ejs", {doc: doc});
+    res.render("viewOneIngredient.ejs", {doc: doc});
   }).catch(err => {
     console.log(err);
   });
 });
 
-app.post("/recipe", (req, res) => {
-  console.log(req.body);
-  res.status(200);
-  res.send(req.body.name);
-});
 
 module.exports = app;

@@ -7,17 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/views/css/bootstrap.css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <title><% =doc.name %></title>
+    <title><%= doc.name %></title>
    
 </head>
 
 <body>
 
+<%- include('navbar.ejs') %>
+
 <div class="background">
     <div class="main">
         
+        
         <h3>Viewing: </h3>
-        <h2><% =doc.name %></h2>
+        <h2><%= doc.name %></h2>
         <h4>Current Ingredients: </h4>
 
         <ul class="list-group" id="ingrList"></ul>
@@ -28,10 +31,17 @@
 <script>
     $.get("../api/ingredient", function(data) {
         var temp = data.ingredients.map(ingredient => {
-            return '<li class="list-group-item"><a href="./ingredient/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
+            return '<li class="list-group-item"><a href="../ingredients/'+ ingredient._id +'">'+ingredient.name+'</a></li>';
         }).join(" ");
         document.getElementById("ingrList").innerHTML = temp;
     });
+    
+    $(function () {
+        $('nav li a').filter(function () {
+            return this.href === location.href;
+        }).addClass('active');
+    });
+    
 </script>
 </body>
 </html>
