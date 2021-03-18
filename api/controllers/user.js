@@ -73,19 +73,15 @@ exports.user_login = (req, res, next) => {
                     }
                 );
                 res.cookie('token', token, { httpOnly: false, maxAge: 43200 });
-                return res.status(200).json({
-                    message: 'Auth successful',
-                    token: token
-                });
+                res.header('token', JSON.stringify({ token: 'token' }));
+                res.render("index/?login=true");
             }
             return res.status(401).json({
                 message: 'Auth failed'
             });
         }); 
     }).catch(err => {
-        return res.status(401).json({
-            message: 'Auth failed'
-        })
+        res.render("/login/?login=false")
     });
 }
 
